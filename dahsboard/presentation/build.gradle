@@ -1,6 +1,8 @@
 plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
+    id 'com.google.dagger.hilt.android'
 }
 
 android {
@@ -28,14 +30,71 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    buildFeatures {
+        compose true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion '1.3.2'
+    }
+    packagingOptions {
+        resources {
+            excludes += '/META-INF/{AL2.0,LGPL2.1}'
+        }
+    }
 }
 
 dependencies {
 
-    implementation 'androidx.core:core-ktx:1.8.0'
-    implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'com.google.android.material:material:1.9.0'
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    implementation project(":common:utils")
+
+    implementation Deps.core
+    implementation Deps.lifecycle
+    implementation Deps.activityCompose
+    implementation platform(Deps.composeBom)
+    implementation Deps.composeUi
+    implementation Deps.composeUiGraphics
+    implementation Deps.composeUiToolingPreview
+    implementation Deps.composeMaterial3
+
+    testImplementation TestImplementation.junit
+    androidTestImplementation AndroidTestImplementation.testExtJunit
+    androidTestImplementation platform(Deps.composeBom)
+    androidTestImplementation AndroidTestImplementation.espressoCore
+    androidTestImplementation AndroidTestImplementation.composeUiTestJunit4
+    debugImplementation DebugImplementation.debugComposeUiTooling
+    debugImplementation DebugImplementation.debugComposeUiTestManifest
+
+    //extra added dependencies
+
+    //hilt
+    implementation Deps.hilt
+    kapt Deps.hiltCompiler
+
+    //hilt viewmodel
+    implementation Deps.lifecycleViewModelCompose
+
+    //room db
+    implementation Deps.room
+    kapt Deps.roomCompiler
+
+    //coroutines
+    implementation Deps.coroutines
+
+    //compose navigation
+    implementation Deps.navigationCompose
+
+    //hilt navigation compose
+    implementation Deps.hiltNavigationCompose
+
+    //gson library
+    implementation Deps.gson
+
+    //retrofit
+    implementation Deps.retrofit
+    implementation Deps.retrofitConverterGson
+    implementation Deps.okhttp
+    implementation Deps.okhttpLoggingInterceptor
+
+    //coil
+    implementation Deps.coilCompose
 }
