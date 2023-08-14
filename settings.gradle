@@ -1,0 +1,23 @@
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+rootProject.name = "NewsWave"
+include ':app'
+include ':dahsboard:presentation'
+include ':dahsboard:data'
+include ':dahsboard:domain'
+include ':common:utils'
+include ':details:data'
+include ':details:domain'
+include ':details:presentation'
