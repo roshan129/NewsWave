@@ -13,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.roshanadke.common.utils.navigation.Screen
 
 @Composable
 fun DashboardScreen(
@@ -20,7 +21,6 @@ fun DashboardScreen(
 ) {
 
     Box {
-
         Column(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -29,7 +29,7 @@ fun DashboardScreen(
             Text(text = "Dashboard Screen")
             Spacer(modifier = Modifier.height(40.dp))
             Button(onClick = {
-                //navController.navigate(Screen.DetailsScreen.route)
+                navController.navigate(Screen.DetailsScreen.route)
             }) {
                 Text(text = "Details Screen")
             }

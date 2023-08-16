@@ -1,19 +1,21 @@
-package com.roshanadke.dahsboard.presentation.navigation
+package com.roshanadke.details.presentation.navigation
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import com.roshanadke.common.utils.navigation.FeatureApi
 
-interface DashboardApi : FeatureApi {
+interface DetailsApi : FeatureApi {
 
 }
 
-class DashboardApiImpl : DashboardApi {
+class DetailsApiImpl: DetailsApi {
     override fun registerGraph(
         navHostController: NavHostController,
         navGraphBuilder: NavGraphBuilder
     ) {
-        InternalDashboardNewsApi.registerGraph(navHostController, navGraphBuilder)
+        InternalDetailsNewsApi.registerGraph(
+            navHostController,
+            navGraphBuilder
+        )
     }
-
 }
