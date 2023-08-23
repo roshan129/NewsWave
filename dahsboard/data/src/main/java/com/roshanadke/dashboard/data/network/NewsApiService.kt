@@ -8,10 +8,10 @@ import retrofit2.http.Query
 interface NewsApiService {
 
     companion object {
-        val BASE_URL = "https://newsapi.org/v2"
+        val BASE_URL = "https://newsapi.org/v2/"
     }
 
-    @GET("/everything")
+    @GET("everything")
     suspend fun getNewsList(
         @Query("q") query: String,
         @Query("pageSize") pageSize: String,

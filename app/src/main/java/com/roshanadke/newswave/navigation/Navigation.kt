@@ -1,4 +1,4 @@
-package com.roshanadke.newswave.ui.navigation
+package com.roshanadke.newswave.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController

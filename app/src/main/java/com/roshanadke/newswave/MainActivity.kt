@@ -8,10 +8,12 @@ import com.roshanadke.dahsboard.presentation.navigation.DashboardApi
 import com.roshanadke.dahsboard.presentation.navigation.DashboardApiImpl
 import com.roshanadke.details.presentation.navigation.DetailsApi
 import com.roshanadke.details.presentation.navigation.DetailsApiImpl
-import com.roshanadke.newswave.ui.navigation.Navigation
-import com.roshanadke.newswave.ui.navigation.NavigationProvider
+import com.roshanadke.newswave.navigation.Navigation
+import com.roshanadke.newswave.navigation.NavigationProvider
 import com.roshanadke.newswave.ui.theme.NewsWaveTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

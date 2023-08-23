@@ -46,6 +46,9 @@ android {
 dependencies {
 
     implementation project(":common:utils")
+    implementation project(":dahsboard:domain")
+    implementation project(":dahsboard:data")
+
 
     implementation Deps.core
     implementation Deps.lifecycle
