@@ -3,7 +3,7 @@ package com.roshanadke.newswave.navigation
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import com.roshanadke.newswave.DASHBOARD_GRAPH_ROUTE
+import com.roshanadke.common.utils.DASHBOARD_GRAPH_ROUTE
 
 @Composable
 fun Navigation(

@@ -33,6 +33,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
+import com.roshanadke.common.utils.encodeObjectToUri
+import com.roshanadke.common.utils.navigation.Screen
+import com.roshanadke.common.utils.objectToString
 import com.roshanadke.dahsboard.presentation.viewmodel.NewsDashboardViewModel
 import com.roshanadke.dashboard.domain.model.Article
 import okhttp3.HttpUrl.Companion.toHttpUrl
@@ -60,7 +63,18 @@ fun DashboardScreen(
             LazyColumn {
                 items(newsList.articles) {
 
-                    NewsItemCard(it)
+                    NewsItemCard(
+                        it,
+                        onNewsItemClicked = {
+                            //navController.navigate(Screen.DetailsScreen.route + "?article=${encodeObjectToUri(it)}")
+                            //navController.navigate(Screen.DetailsScreen.withArgs(objectToString(it) ?: ""))
+
+                            navController.currentBackStackEntry?.savedStateHandle?.apply {
+                                set("article", it)
+                            }
+                            navController.navigate(Screen.DetailsScreen.withArgs("fddfgdf"))
+                        }
+                    )
 
                 }
             }
@@ -72,7 +86,10 @@ fun DashboardScreen(
 
 @OptIn(ExperimentalCoilApi::class)
 @Composable
-fun NewsItemCard(article: Article) {
+fun NewsItemCard(
+    article: Article,
+    onNewsItemClicked: () -> Unit,
+) {
 
     val context = LocalContext.current
 
@@ -81,7 +98,7 @@ fun NewsItemCard(article: Article) {
             .padding(8.dp)
             .fillMaxWidth()
             .clickable {
-                Toast.makeText(context, "sdfsdf", Toast.LENGTH_LONG).show()
+                onNewsItemClicked()
             }
     ) {
 

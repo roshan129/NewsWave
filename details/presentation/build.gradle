@@ -47,6 +47,7 @@ dependencies {
 
 
     implementation project(":common:utils")
+    implementation project(":dahsboard:domain")
 
     implementation Deps.core
     implementation Deps.lifecycle
