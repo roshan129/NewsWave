@@ -1,8 +1,8 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package com.roshanadke.dahsboard.presentation.screens
 
-import android.R
 import android.util.Log
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -14,17 +14,23 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Divider
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilterChip
+import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -33,12 +39,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
-import com.roshanadke.common.utils.encodeObjectToUri
 import com.roshanadke.common.utils.navigation.Screen
-import com.roshanadke.common.utils.objectToString
 import com.roshanadke.dahsboard.presentation.viewmodel.NewsDashboardViewModel
 import com.roshanadke.dashboard.domain.model.Article
-import okhttp3.HttpUrl.Companion.toHttpUrl
 
 @Composable
 fun DashboardScreen(
@@ -60,7 +63,34 @@ fun DashboardScreen(
             verticalArrangement = Arrangement.Center
         ) {
 
+            val chipItemList = listOf(
+                "Tech", "Science", "Business", "Entertainment",
+                "Sports", "Health", "Politics", "Travel", "Fashion", "Food"
+            )
+
+            var selectedItem by remember {
+                mutableStateOf(chipItemList[0])
+            }
+
+            LazyRow(
+                Modifier.padding(start = 8.dp, end = 8.dp, top = 12.dp ),
+            ) {
+
+                items(chipItemList) { item ->
+                    ChipsItems(
+                        chipItem = item,
+                        selectedItem = selectedItem,
+                        onChipItemSelected = { chipItem ->
+                            selectedItem = chipItem
+                        }
+                    )
+                }
+
+            }
+
             LazyColumn {
+
+
                 items(newsList.articles) {
 
                     NewsItemCard(
@@ -83,6 +113,34 @@ fun DashboardScreen(
     }
 
 }
+
+@Composable
+fun ChipsItems(
+    chipItem: String,
+    selectedItem: String,
+    onChipItemSelected: (chipItem: String) -> Unit,
+) {
+
+    val chipColor = FilterChipDefaults.filterChipColors(
+        containerColor = Color.White,
+        labelColor = Color.Black,
+        selectedContainerColor = Color.Red,
+        selectedLabelColor = Color.White
+    )
+
+    FilterChip(
+        modifier = Modifier.padding(horizontal = 4.dp),
+        selected = (chipItem == selectedItem),
+        onClick = {
+            onChipItemSelected(chipItem)
+        },
+        label = {
+            Text(text = chipItem)
+        },
+        colors = chipColor
+    )
+}
+
 
 @OptIn(ExperimentalCoilApi::class)
 @Composable
