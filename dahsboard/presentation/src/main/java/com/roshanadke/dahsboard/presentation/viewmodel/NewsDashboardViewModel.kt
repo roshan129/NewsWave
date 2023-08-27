@@ -35,6 +35,9 @@ class NewsDashboardViewModel @Inject constructor(
     private var _newsListState: MutableState<NewsListDataState> = mutableStateOf(NewsListDataState())
     val newsListState: State<NewsListDataState> = _newsListState
 
+    private var _scrollToTop: MutableState<Boolean> = mutableStateOf(false)
+    val scrollToTopState: State<Boolean> = _scrollToTop
+
 
     init {
         fetchInitialNewsDashboardList(
@@ -59,6 +62,10 @@ class NewsDashboardViewModel @Inject constructor(
         return pageNumber.value
     }
 
+    fun updateScrollToTop(flag: Boolean) {
+        _scrollToTop.value = flag
+    }
+
     fun fetchInitialNewsDashboardList(
         query: String,
         pageNumber: String
@@ -74,13 +81,13 @@ class NewsDashboardViewModel @Inject constructor(
                 }
 
                 is Resource.Loading -> {
-                    Log.d("TAG", "getNewsDashboardUseCase: loading")
                     _newsListState.value = _newsListState.value.copy(
                         isLoading = true
                     )
                 }
 
                 is Resource.Success -> {
+                    updateScrollToTop(true)
                     it.data?.let {data ->
                         _newsListState.value = _newsListState.value.copy(
                             articles = data.articles,
@@ -107,7 +114,6 @@ class NewsDashboardViewModel @Inject constructor(
                 }
 
                 is Resource.Loading -> {
-                    Log.d("TAG", "getNewsDashboardUseCase: loading")
                     _newsListState.value = _newsListState.value.copy(
                         isLoading = true
                     )

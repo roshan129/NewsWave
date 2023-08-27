@@ -62,14 +62,24 @@ fun DashboardScreen(
 
         Column(
             modifier = Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+           /* horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center*/
         ) {
+
+            val scrollState = rememberLazyListState()
+
+            val scrollToTop = viewModel.scrollToTopState.value
 
             val chipItemList = listOf(
                 "Tech", "Science", "Business", "Entertainment",
                 "Sports", "Health", "Politics", "Travel", "Fashion", "Food"
             )
+
+            LaunchedEffect(scrollToTop) {
+                if(scrollToTop) scrollState.scrollToItem(0)
+                viewModel.updateScrollToTop(false)
+            }
+
             LazyRow(
                 Modifier.padding(start = 8.dp, end = 8.dp, top = 12.dp),
             ) {
@@ -78,22 +88,21 @@ fun DashboardScreen(
                     ChipsItems(
                         chipItem = item,
                         selectedItem = selectedChipItem,
-                        onChipItemSelected = { chipItem ->
-                            if (chipItem != selectedChipItem) {
-                                viewModel.setSelectedChipItem(chipItem)
+                        onChipItemSelected = { newlySelectedChipItem ->
+                            if (newlySelectedChipItem != selectedChipItem) {
+                                viewModel.setSelectedChipItem(newlySelectedChipItem)
                                 viewModel.setPageNumber(1)
                                 viewModel.fetchInitialNewsDashboardList(
-                                    selectedChipItem,
+                                    newlySelectedChipItem,
                                     STARTING_PAGE_INDEX
                                 )
-
                             }
                         }
                     )
                 }
 
             }
-            val scrollState = rememberLazyListState()
+
 
             val endOfListReached by remember {
                 derivedStateOf {
