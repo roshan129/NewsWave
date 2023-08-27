@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
+import com.roshanadke.common.utils.KEY_ARTICLE
 import com.roshanadke.dashboard.domain.model.Article
 
 
@@ -31,7 +32,7 @@ fun DetailsScreen(
 ) {
 
     val articleDetails =
-        navController.previousBackStackEntry?.savedStateHandle?.get<Article>("article")
+        navController.previousBackStackEntry?.savedStateHandle?.get<Article>(KEY_ARTICLE)
 
     Box(
         modifier = Modifier

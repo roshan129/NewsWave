@@ -18,6 +18,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
@@ -40,6 +41,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
+import com.roshanadke.common.utils.KEY_ARTICLE
 import com.roshanadke.common.utils.STARTING_PAGE_INDEX
 import com.roshanadke.common.utils.isScrolledToEnd
 import com.roshanadke.common.utils.navigation.Screen
@@ -52,10 +54,9 @@ fun DashboardScreen(
     viewModel: NewsDashboardViewModel = hiltViewModel(),
 ) {
 
+    val newsListState = viewModel.newsListState.value
 
-    Log.d("TAG", "DashboardScreen: pageNumber: ${viewModel.getPageNumber()} ")
-
-    val newsList = viewModel.newsList.value
+    val selectedChipItem = viewModel.selectedChipItem.value
 
     Box {
 
@@ -69,11 +70,6 @@ fun DashboardScreen(
                 "Tech", "Science", "Business", "Entertainment",
                 "Sports", "Health", "Politics", "Travel", "Fashion", "Food"
             )
-
-            var selectedItem by remember {
-                mutableStateOf(chipItemList[0])
-            }
-
             LazyRow(
                 Modifier.padding(start = 8.dp, end = 8.dp, top = 12.dp),
             ) {
@@ -81,14 +77,13 @@ fun DashboardScreen(
                 items(chipItemList) { item ->
                     ChipsItems(
                         chipItem = item,
-                        selectedItem = selectedItem,
+                        selectedItem = selectedChipItem,
                         onChipItemSelected = { chipItem ->
-                            if(chipItem != selectedItem) {
-                                Log.d("TAG", "DashboardScreen: inside chip item selcted")
-                                selectedItem = chipItem
+                            if (chipItem != selectedChipItem) {
+                                viewModel.setSelectedChipItem(chipItem)
                                 viewModel.setPageNumber(1)
                                 viewModel.fetchInitialNewsDashboardList(
-                                    selectedItem,
+                                    selectedChipItem,
                                     STARTING_PAGE_INDEX
                                 )
 
@@ -110,31 +105,45 @@ fun DashboardScreen(
                 if (endOfListReached) {
                     viewModel.incrementPageNumber()
                     val incrementedPageNumber = viewModel.getPageNumber().toString()
-                    viewModel.loadMoreNewsItems(selectedItem, incrementedPageNumber)
+                    viewModel.loadMoreNewsItems(selectedChipItem, incrementedPageNumber)
                 }
             }
 
+
+
             LazyColumn(state = scrollState) {
-                items(newsList.articles) {
+                items(newsListState.articles) {
 
                     NewsItemCard(
                         it,
                         onNewsItemClicked = {
-                            //navController.navigate(Screen.DetailsScreen.route + "?article=${encodeObjectToUri(it)}")
-                            //navController.navigate(Screen.DetailsScreen.withArgs(objectToString(it) ?: ""))
-
                             navController.currentBackStackEntry?.savedStateHandle?.apply {
-                                set("article", it)
+                                set(KEY_ARTICLE, it)
                             }
-                            navController.navigate(Screen.DetailsScreen.withArgs("fddfgdf"))
+                            navController.navigate(Screen.DetailsScreen.route)
                         }
                     )
 
                 }
             }
-
-
         }
+
+        if (newsListState.isLoading) {
+            ShowProgressBar()
+        }
+
+    }
+
+}
+
+@Composable
+fun ShowProgressBar() {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        CircularProgressIndicator(color = Color.Red)
     }
 
 }

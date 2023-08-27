@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.roshanadke.common.utils.DEFAULT_TECH_QUERY
 import com.roshanadke.common.utils.Resource
 import com.roshanadke.common.utils.STARTING_PAGE_INDEX
+import com.roshanadke.dahsboard.presentation.NewsListDataState
 import com.roshanadke.dashboard.domain.model.NewsMainList
 import com.roshanadke.dashboard.domain.use_case.GetNewsDashboardListUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -28,11 +29,22 @@ class NewsDashboardViewModel @Inject constructor(
     private var _pageNumber: MutableState<Int> = mutableStateOf(1)
     val pageNumber: State<Int> = _pageNumber
 
+    private var _selectedChipItem: MutableState<String> = mutableStateOf(DEFAULT_TECH_QUERY)
+    val selectedChipItem: State<String> = _selectedChipItem
+
+    private var _newsListState: MutableState<NewsListDataState> = mutableStateOf(NewsListDataState())
+    val newsListState: State<NewsListDataState> = _newsListState
+
+
     init {
         fetchInitialNewsDashboardList(
             DEFAULT_TECH_QUERY,
             STARTING_PAGE_INDEX
         )
+    }
+
+    fun setSelectedChipItem(chipItem: String) {
+        _selectedChipItem.value = chipItem
     }
 
     fun incrementPageNumber() {
@@ -56,18 +68,23 @@ class NewsDashboardViewModel @Inject constructor(
             when(it) {
                 is Resource.Error -> {
                     Log.d("TAG", "getNewsDashboardUseCase: error")
+                    _newsListState.value = _newsListState.value.copy(
+                        isLoading = false
+                    )
                 }
 
                 is Resource.Loading -> {
                     Log.d("TAG", "getNewsDashboardUseCase: loading")
+                    _newsListState.value = _newsListState.value.copy(
+                        isLoading = true
+                    )
                 }
 
                 is Resource.Success -> {
                     it.data?.let {data ->
-                        _newsList.value = _newsList.value.copy(
-                            data.articles,
-                            data.status,
-                            data.totalResults
+                        _newsListState.value = _newsListState.value.copy(
+                            articles = data.articles,
+                            isLoading = false
                         )
                     }
                 }
@@ -84,21 +101,32 @@ class NewsDashboardViewModel @Inject constructor(
             when(it) {
                 is Resource.Error -> {
                     Log.d("TAG", "getNewsDashboardUseCase: error")
+                    _newsListState.value = _newsListState.value.copy(
+                        isLoading = false
+                    )
                 }
 
                 is Resource.Loading -> {
                     Log.d("TAG", "getNewsDashboardUseCase: loading")
+                    _newsListState.value = _newsListState.value.copy(
+                        isLoading = true
+                    )
                 }
 
                 is Resource.Success -> {
                     it.data?.let {data ->
                         val newArticles = data.articles
-                        val combinedArticles = _newsList.value.articles + newArticles
+                        val combinedArticles = _newsListState.value.articles + newArticles
 
-                        _newsList.value = _newsList.value.copy(
+                     /*   _newsList.value = _newsList.value.copy(
                             articles = combinedArticles,
                             status = data.status,
                             totalResults = data.totalResults
+                        )*/
+
+                        _newsListState.value = _newsListState.value.copy(
+                            articles = combinedArticles,
+                            isLoading = false
                         )
                     }
                 }

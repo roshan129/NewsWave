@@ -12,6 +12,7 @@ import com.roshanadke.common.utils.navigation.Screen
 import com.roshanadke.dashboard.domain.model.Article
 import com.roshanadke.details.presentation.DetailsScreen
 import com.roshanadke.common.utils.DETAILS_GRAPH_ROUTE
+import com.roshanadke.common.utils.KEY_ARTICLE
 import com.roshanadke.common.utils.stringToObject
 
 object InternalDetailsNewsApi : FeatureApi {
@@ -24,17 +25,10 @@ object InternalDetailsNewsApi : FeatureApi {
             route = DETAILS_GRAPH_ROUTE
         ) {
             composable(
-                route = Screen.DetailsScreen.route + "/{article}",
-                arguments = listOf(
-                    navArgument("article") {
-                        type = NavType.StringType
-                    }
-                )
+                route = Screen.DetailsScreen.route,
             ) {
-                DetailsScreen( navHostController)
+                DetailsScreen(navHostController)
             }
         }
     }
-
-
 }
