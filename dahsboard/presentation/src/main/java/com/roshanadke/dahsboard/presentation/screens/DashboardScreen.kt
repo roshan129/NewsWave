@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
@@ -24,6 +25,7 @@ import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,7 +33,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -39,6 +40,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
+import com.roshanadke.common.utils.STARTING_PAGE_INDEX
+import com.roshanadke.common.utils.isScrolledToEnd
 import com.roshanadke.common.utils.navigation.Screen
 import com.roshanadke.dahsboard.presentation.viewmodel.NewsDashboardViewModel
 import com.roshanadke.dashboard.domain.model.Article
@@ -46,17 +49,16 @@ import com.roshanadke.dashboard.domain.model.Article
 @Composable
 fun DashboardScreen(
     navController: NavController,
-    newsDashboardViewModel: NewsDashboardViewModel = hiltViewModel(),
+    viewModel: NewsDashboardViewModel = hiltViewModel(),
 ) {
 
-    LaunchedEffect(Unit) {
-        newsDashboardViewModel.getNewsDashboardList("tech", "1")
-    }
 
-    val newsList = newsDashboardViewModel.newsList.value
+    Log.d("TAG", "DashboardScreen: pageNumber: ${viewModel.getPageNumber()} ")
 
+    val newsList = viewModel.newsList.value
 
     Box {
+
         Column(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -73,7 +75,7 @@ fun DashboardScreen(
             }
 
             LazyRow(
-                Modifier.padding(start = 8.dp, end = 8.dp, top = 12.dp ),
+                Modifier.padding(start = 8.dp, end = 8.dp, top = 12.dp),
             ) {
 
                 items(chipItemList) { item ->
@@ -81,16 +83,38 @@ fun DashboardScreen(
                         chipItem = item,
                         selectedItem = selectedItem,
                         onChipItemSelected = { chipItem ->
-                            selectedItem = chipItem
+                            if(chipItem != selectedItem) {
+                                Log.d("TAG", "DashboardScreen: inside chip item selcted")
+                                selectedItem = chipItem
+                                viewModel.setPageNumber(1)
+                                viewModel.fetchInitialNewsDashboardList(
+                                    selectedItem,
+                                    STARTING_PAGE_INDEX
+                                )
+
+                            }
                         }
                     )
                 }
 
             }
+            val scrollState = rememberLazyListState()
 
-            LazyColumn {
+            val endOfListReached by remember {
+                derivedStateOf {
+                    scrollState.isScrolledToEnd()
+                }
+            }
 
+            LaunchedEffect(endOfListReached) {
+                if (endOfListReached) {
+                    viewModel.incrementPageNumber()
+                    val incrementedPageNumber = viewModel.getPageNumber().toString()
+                    viewModel.loadMoreNewsItems(selectedItem, incrementedPageNumber)
+                }
+            }
 
+            LazyColumn(state = scrollState) {
                 items(newsList.articles) {
 
                     NewsItemCard(
@@ -108,6 +132,7 @@ fun DashboardScreen(
 
                 }
             }
+
 
         }
     }
@@ -149,7 +174,6 @@ fun NewsItemCard(
     onNewsItemClicked: () -> Unit,
 ) {
 
-    val context = LocalContext.current
 
     Column(
         modifier = Modifier
@@ -160,7 +184,6 @@ fun NewsItemCard(
             }
     ) {
 
-        Log.d("TAG", "NewsItemCard: image: ${article.urlToImage} ")
 
         Spacer(modifier = Modifier.height(12.dp))
         Image(
@@ -169,7 +192,7 @@ fun NewsItemCard(
                 builder = {
                     crossfade(true)
                 }),
-            contentDescription = article.source.name,
+            contentDescription = article.source?.name,
             modifier = Modifier
                 .aspectRatio(16f / 9f)
                 /*.fillMaxSize()
@@ -186,7 +209,7 @@ fun NewsItemCard(
         )
         Spacer(modifier = Modifier.height(8.dp))
         Text(
-            text = article.source.name,
+            text = article.source?.name ?: "",
             fontWeight = FontWeight.Normal,
             fontSize = 12.sp,
             modifier = Modifier.padding(horizontal = 12.dp)

@@ -1,5 +1,6 @@
 package com.roshanadke.dashboard.data.repository
 
+import com.roshanadke.common.utils.ARTICLES_PER_PAGE
 import com.roshanadke.common.utils.Resource
 import com.roshanadke.dashboard.data.dto.NewsMainListDto
 import com.roshanadke.dashboard.data.network.NewsApiService
@@ -20,7 +21,7 @@ class NewsDashboardRepositoryImpl(
         try {
             val result = newsDashboardApiService.getNewsList(
                 query = query,
-                pageSize = "3",
+                pageSize = ARTICLES_PER_PAGE,
                 pageNumber = pageNumber
             )
 

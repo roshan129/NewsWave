@@ -1,5 +1,6 @@
 package com.roshanadke.dashboard.data.di
 
+import com.google.gson.GsonBuilder
 import com.roshanadke.dashboard.data.network.NewsApiService
 import com.roshanadke.dashboard.data.repository.NewsDashboardRepositoryImpl
 import com.roshanadke.dashboard.domain.repository.NewsDashboardRepository

@@ -50,7 +50,7 @@ fun DetailsScreen(
                     Spacer(modifier = Modifier.height(24.dp))
                     Image(
                         painter = rememberImagePainter(data = article.urlToImage),
-                        contentDescription = article.source.name,
+                        contentDescription = article.source?.name,
                         modifier = Modifier
                             .aspectRatio(16f / 9f)
                             .padding(5.dp)
