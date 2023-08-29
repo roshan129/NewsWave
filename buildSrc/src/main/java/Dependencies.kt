@@ -18,6 +18,7 @@ object Version {
     const val okhttp = "5.0.0-alpha.2"
     const val okhttpLoggingInterceptor = "4.9.1"
     const val coilCompose = "1.3.2"
+    const val webView  = "1.7.0"
 
 }
 
@@ -45,6 +46,8 @@ object Deps {
     const val okhttp = "com.squareup.okhttp3:okhttp:${Version.okhttp}"
     const val okhttpLoggingInterceptor = "com.squareup.okhttp3:logging-interceptor:${Version.okhttpLoggingInterceptor}"
     const val coilCompose = "io.coil-kt:coil-compose:${Version.coilCompose}"
+
+    const val webView = "androidx.webkit:webkit:${Version.webView}"
 
 }
 

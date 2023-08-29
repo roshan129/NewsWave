@@ -45,6 +45,7 @@ import com.roshanadke.common.utils.KEY_ARTICLE
 import com.roshanadke.common.utils.STARTING_PAGE_INDEX
 import com.roshanadke.common.utils.isScrolledToEnd
 import com.roshanadke.common.utils.navigation.Screen
+import com.roshanadke.dahsboard.presentation.screens.components.SearchBar
 import com.roshanadke.dahsboard.presentation.viewmodel.NewsDashboardViewModel
 import com.roshanadke.dashboard.domain.model.Article
 
@@ -62,8 +63,8 @@ fun DashboardScreen(
 
         Column(
             modifier = Modifier.fillMaxSize(),
-           /* horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center*/
+            /* horizontalAlignment = Alignment.CenterHorizontally,
+             verticalArrangement = Arrangement.Center*/
         ) {
 
             val scrollState = rememberLazyListState()
@@ -76,13 +77,14 @@ fun DashboardScreen(
             )
 
             LaunchedEffect(scrollToTop) {
-                if(scrollToTop) scrollState.scrollToItem(0)
+                if (scrollToTop) scrollState.scrollToItem(0)
                 viewModel.updateScrollToTop(false)
             }
 
             LazyRow(
                 Modifier.padding(start = 8.dp, end = 8.dp, top = 12.dp),
             ) {
+
 
                 items(chipItemList) { item ->
                     ChipsItems(
@@ -118,8 +120,6 @@ fun DashboardScreen(
                 }
             }
 
-
-
             LazyColumn(state = scrollState) {
                 items(newsListState.articles) {
 
@@ -129,7 +129,8 @@ fun DashboardScreen(
                             navController.currentBackStackEntry?.savedStateHandle?.apply {
                                 set(KEY_ARTICLE, it)
                             }
-                            navController.navigate(Screen.DetailsScreen.route)
+                            //navController.navigate(Screen.DetailsScreen.route)
+                            navController.navigate(Screen.ArticleScreen.route)
                         }
                     )
 

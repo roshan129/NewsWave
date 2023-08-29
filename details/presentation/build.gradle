@@ -57,6 +57,7 @@ dependencies {
     implementation Deps.composeUiGraphics
     implementation Deps.composeUiToolingPreview
     implementation Deps.composeMaterial3
+    implementation Deps.webView
 
     testImplementation TestImplementation.junit
     androidTestImplementation AndroidTestImplementation.testExtJunit

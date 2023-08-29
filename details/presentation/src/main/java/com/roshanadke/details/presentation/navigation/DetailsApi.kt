@@ -17,5 +17,9 @@ class DetailsApiImpl: DetailsApi {
             navHostController,
             navGraphBuilder
         )
+        InternalArticleNewsApi.registerGraph(
+            navHostController,
+            navGraphBuilder
+        )
     }
 }
