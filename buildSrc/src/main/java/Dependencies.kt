@@ -12,7 +12,7 @@ object Version {
     const val lifecycleViewModelCompose = "2.6.1"
     const val room = "2.5.1"
     const val coroutines = "1.6.4"
-    const val navigationCompose = "2.5.3"
+    const val navigationCompose = "2.7.0-beta02"
     const val gson = "2.9.0"
     const val retrofit = "2.9.0"
     const val okhttp = "5.0.0-alpha.2"

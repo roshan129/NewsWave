@@ -1,6 +1,7 @@
 package com.roshanadke.dashboard.data.di
 
 import com.google.gson.GsonBuilder
+import com.roshanadke.dashboard.data.BuildConfig
 import com.roshanadke.dashboard.data.network.NewsApiService
 import com.roshanadke.dashboard.data.repository.NewsDashboardRepositoryImpl
 import com.roshanadke.dashboard.domain.repository.NewsDashboardRepository
@@ -32,7 +33,7 @@ object DashboardDataModule {
             .addInterceptor { chain ->
                 val original = chain.request()
                 val request = original.newBuilder()
-                    .header("Authorization", "Bearer dc2dcafae1b74c34a91c63b1a24abcb9")
+                    .header("Authorization", BuildConfig.API_KEY)
                     .method(original.method, original.body)
                     .build()
 

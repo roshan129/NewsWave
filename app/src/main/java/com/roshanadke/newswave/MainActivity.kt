@@ -1,8 +1,15 @@
 package com.roshanadke.newswave
 
+import android.app.Activity
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
+import androidx.core.view.WindowCompat
 import androidx.navigation.compose.rememberNavController
 import com.roshanadke.dahsboard.presentation.navigation.DashboardApi
 import com.roshanadke.dahsboard.presentation.navigation.DashboardApiImpl

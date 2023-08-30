@@ -8,6 +8,8 @@ import com.roshanadke.common.utils.ARTICLE_GRAPH_ROUTE
 import com.roshanadke.common.utils.navigation.FeatureApi
 import com.roshanadke.common.utils.navigation.Screen
 import com.roshanadke.details.presentation.DetailsScreen
+import androidx.compose.animation.AnimatedContentScope
+import androidx.compose.animation.AnimatedContentTransitionScope
 import com.roshanadke.common.utils.DETAILS_GRAPH_ROUTE
 import com.roshanadke.details.presentation.screen.ArticleScreen
 
@@ -19,10 +21,16 @@ object InternalArticleNewsApi : FeatureApi {
 
         navGraphBuilder.navigation(
             startDestination = Screen.ArticleScreen.route,
-            route = ARTICLE_GRAPH_ROUTE
+            route = ARTICLE_GRAPH_ROUTE,
         ) {
             composable(
                 route = Screen.ArticleScreen.route,
+                enterTransition = {
+                    slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Left)
+                },
+                exitTransition = {
+                    slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Right)
+                }
             ) {
                 ArticleScreen(navHostController)
             }
