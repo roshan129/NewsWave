@@ -5,5 +5,6 @@ import com.roshanadke.dashboard.domain.model.NewsMainList
 
 data class NewsListDataState(
     val articles: List<Article> = emptyList(),
-    val isLoading: Boolean = false
+    val isLoading: Boolean = false,
+    val error: String? = null
 )

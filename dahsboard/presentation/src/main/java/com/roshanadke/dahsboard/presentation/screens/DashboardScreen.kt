@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
@@ -48,6 +49,7 @@ import com.roshanadke.common.utils.navigation.Screen
 import com.roshanadke.dahsboard.presentation.screens.components.SearchBar
 import com.roshanadke.dahsboard.presentation.viewmodel.NewsDashboardViewModel
 import com.roshanadke.dashboard.domain.model.Article
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun DashboardScreen(
@@ -59,6 +61,24 @@ fun DashboardScreen(
 
     val selectedChipItem = viewModel.selectedChipItem.value
 
+    val scrollState = rememberLazyListState()
+
+
+    val endOfListReached by remember {
+        derivedStateOf {
+            scrollState.isScrolledToEnd()
+        }
+    }
+
+    LaunchedEffect(endOfListReached) {
+        if (endOfListReached) {
+            viewModel.incrementPageNumber()
+            val incrementedPageNumber = viewModel.getPageNumber().toString()
+            viewModel.loadMoreNewsItems(selectedChipItem, incrementedPageNumber)
+        }
+    }
+
+
     Box {
 
         Column(
@@ -67,7 +87,6 @@ fun DashboardScreen(
              verticalArrangement = Arrangement.Center*/
         ) {
 
-            val scrollState = rememberLazyListState()
 
             val scrollToTop = viewModel.scrollToTopState.value
 
@@ -106,42 +125,74 @@ fun DashboardScreen(
             }
 
 
-            val endOfListReached by remember {
-                derivedStateOf {
-                    scrollState.isScrolledToEnd()
-                }
-            }
-
-            LaunchedEffect(endOfListReached) {
-                if (endOfListReached) {
-                    viewModel.incrementPageNumber()
-                    val incrementedPageNumber = viewModel.getPageNumber().toString()
-                    viewModel.loadMoreNewsItems(selectedChipItem, incrementedPageNumber)
-                }
-            }
-
             LazyColumn(state = scrollState) {
-                items(newsListState.articles) {
+                val newsList = newsListState.articles
+                itemsIndexed(newsList) { index, article ->
 
                     NewsItemCard(
-                        it,
+                        article,
                         onNewsItemClicked = {
                             navController.currentBackStackEntry?.savedStateHandle?.apply {
-                                set(KEY_ARTICLE, it)
+                                set(KEY_ARTICLE, article)
                             }
                             //navController.navigate(Screen.DetailsScreen.route)
                             navController.navigate(Screen.ArticleScreen.route)
                         }
                     )
+                    if (index == newsList.size - 1 && newsListState.isLoading) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(bottom = 12.dp, top = 8.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            CircularProgressIndicator(color = Color.Red)
+
+
+                        }
+                    }
 
                 }
+                /*item {
+                    Column(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        if(viewModel.getPageNumber() != 1 && newsListState.isLoading) {
+                            CircularProgressIndicator(color = Color.Red)
+                        }
+                    }
+                }*/
+
+
             }
+
+            if (newsListState.error != null) {
+                ShowErrorText(newsListState.error)
+
+            }
+
         }
 
-        if (newsListState.isLoading) {
+        Log.d("TAG", "DashboardScreen: page number: ${viewModel.getPageNumber()}")
+
+        if (newsListState.isLoading && viewModel.getPageNumber() == 1) {
             ShowProgressBar()
         }
 
+    }
+
+}
+
+@Composable
+fun ShowErrorText(error: String) {
+    Column(
+        Modifier
+            .fillMaxWidth()
+            .padding(top = 48.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Text(text = error, color = Color.Red, fontSize = 18.sp, fontWeight = FontWeight.Bold)
     }
 
 }
@@ -193,6 +244,9 @@ fun NewsItemCard(
     onNewsItemClicked: () -> Unit,
 ) {
 
+    if (article.url.isEmpty() || article.urlToImage.isEmpty()) {
+        return
+    }
 
     Column(
         modifier = Modifier

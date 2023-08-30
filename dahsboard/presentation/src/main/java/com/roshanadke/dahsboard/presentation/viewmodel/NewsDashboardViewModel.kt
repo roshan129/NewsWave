@@ -13,6 +13,9 @@ import com.roshanadke.dahsboard.presentation.NewsListDataState
 import com.roshanadke.dashboard.domain.model.NewsMainList
 import com.roshanadke.dashboard.domain.use_case.GetNewsDashboardListUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
@@ -37,6 +40,13 @@ class NewsDashboardViewModel @Inject constructor(
 
     private var _scrollToTop: MutableState<Boolean> = mutableStateOf(false)
     val scrollToTopState: State<Boolean> = _scrollToTop
+
+    private var _eventFlow = MutableSharedFlow<UIEvent>()
+    val eventFlow = _eventFlow.asSharedFlow()
+
+    sealed class UIEvent {
+        data class showErrorMessage(val message: String): UIEvent()
+    }
 
 
     init {
@@ -74,9 +84,10 @@ class NewsDashboardViewModel @Inject constructor(
         getNewsDashboardUseCase(query, pageNumber).onEach {
             when(it) {
                 is Resource.Error -> {
-                    Log.d("TAG", "getNewsDashboardUseCase: error")
+                    Log.d("TAG", "fetchInitialNewsDashboardList: insde error")
                     _newsListState.value = _newsListState.value.copy(
-                        isLoading = false
+                        isLoading = false,
+                        error = it.message ?: "Unknown error occurred"
                     )
                 }
 
@@ -91,7 +102,8 @@ class NewsDashboardViewModel @Inject constructor(
                     it.data?.let {data ->
                         _newsListState.value = _newsListState.value.copy(
                             articles = data.articles,
-                            isLoading = false
+                            isLoading = false,
+                            error = null
                         )
                     }
                 }

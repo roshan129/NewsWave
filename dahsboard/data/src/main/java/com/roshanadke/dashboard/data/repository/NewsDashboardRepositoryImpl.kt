@@ -6,6 +6,7 @@ import com.roshanadke.dashboard.data.dto.NewsMainListDto
 import com.roshanadke.dashboard.data.network.NewsApiService
 import com.roshanadke.dashboard.domain.model.NewsMainList
 import com.roshanadke.dashboard.domain.repository.NewsDashboardRepository
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import java.io.IOException
