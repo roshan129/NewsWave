@@ -46,8 +46,8 @@ Build and run the app on an emulator or a physical device.
 # Dependencies
 * **Jetpack Compose:** [Link to Jetpack Compose](https://developer.android.com/jetpack/compose)
 * **Dagger Hilt:** [Link to Dagger Hilt](https://dagger.dev/hilt/)
-* **Retrofit:** [Link to Retrofit](https://square.github.io/retrofit/)https://square.github.io/retrofit/)
-* **Coil:** [Link to Coil](https://coil-kt.github.io/coil/)https://coil-kt.github.io/coil/)
+* **Retrofit:** [Link to Retrofit](https://square.github.io/retrofit/)
+* **Coil:** [Link to Coil](https://coil-kt.github.io/coil/)
 
 # Contributing
 Contributions are welcome! If you'd like to contribute to the project, please follow these steps:
