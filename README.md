@@ -1,7 +1,7 @@
 
 # NewsWave
 
-![screenshot_news 1](https://github.com/roshan129/NewsWave/assets/51310688/3564775d-dea9-411c-b765-6b4953c3ece1)    ![image 7](https://github.com/roshan129/NewsWave/assets/51310688/d45b7c87-d829-43d6-a4b5-e9c6bb8dad5f)
+![screenshot_news 1](https://github.com/roshan129/NewsWave/assets/51310688/3564775d-dea9-411c-b765-6b4953c3ece1)                                  ![image 7](https://github.com/roshan129/NewsWave/assets/51310688/d45b7c87-d829-43d6-a4b5-e9c6bb8dad5f)
 
 
 
