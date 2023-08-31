@@ -1,10 +1,10 @@
 
 # NewsWave
 
-![screenshot_news 1](https://github.com/roshan129/NewsWave/assets/51310688/3564775d-dea9-411c-b765-6b4953c3ece1)
+![screenshot_news 1](https://github.com/roshan129/NewsWave/assets/51310688/3564775d-dea9-411c-b765-6b4953c3ece1)    ![image 7](https://github.com/roshan129/NewsWave/assets/51310688/d45b7c87-d829-43d6-a4b5-e9c6bb8dad5f)
 
 
-![image](https://github.com/roshan129/NewsWave/assets/51310688/99c2c555-7ad0-4c30-b14c-3c7f4516db18)
+
 
 
 Welcome to the News Application repository! This is an Android application that allows users to stay updated with the 
