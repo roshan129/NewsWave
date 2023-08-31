@@ -60,7 +60,7 @@ Contributions are welcome! If you'd like to contribute to the project, please fo
 
 # Contact
 If you have any questions or suggestions, feel free to reach out to roshanadke2015@gmail.com or connect with 
-me on [LinkedIn](https://www.linkedin.com/in/roshan-adke369/)https://www.linkedin.com/in/roshan-adke369/.
+me on [LinkedIn](https://www.linkedin.com/in/roshan-adke369/)
 
 
 
